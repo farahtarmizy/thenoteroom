@@ -1,0 +1,413 @@
+<meta charset="UTF-8">
+<title>The Note Room</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+
+<style>
+  /* ============================================================
+     CONFIG — edit the PROFILE object near the bottom <script> to
+     change name, photo, bio, socials and links. No other edits
+     needed for day-to-day use.
+     ============================================================ */
+
+  :root{
+    --bg: #F6F3EC;
+    --bg-dot: #E9E3D4;
+    --surface: #FFFFFF;
+    --surface-hover: #FBF9F4;
+    --ink: #201D17;
+    --ink-soft: #635D4C;
+    --ink-faint: #8C8571;
+    --accent: #2F5D4F;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #DEE8E1;
+    --gold: #A8752A;
+    --line: #E3DDCD;
+    --ring: #2F5D4F33;
+    --shadow: 220 25% 10%;
+  }
+
+  /* Light theme is fixed on purpose — the page ignores the
+     viewer's system dark/light setting so it always reads bright. */
+
+  *{ box-sizing: border-box; }
+
+  html{ color-scheme: light; }
+
+  body{
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(var(--bg-dot) 1px, transparent 1px) 0 0/22px 22px,
+      var(--bg);
+    color: var(--ink);
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(28px, 8vw, 64px) 18px 48px;
+  }
+
+  .page{
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  /* ---------- profile ---------- */
+
+  .profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .avatar-wrap{
+    position: relative;
+    width: 104px;
+    height: 104px;
+  }
+
+  .avatar-ring{
+    position: absolute;
+    inset: -6px;
+    border: 1.5px solid var(--accent);
+    border-radius: 999px;
+    opacity: .55;
+  }
+
+  .avatar{
+    width: 104px;
+    height: 104px;
+    border-radius: 999px;
+    object-fit: cover;
+    display: block;
+    background: var(--surface);
+    border: 3px solid var(--bg);
+    box-shadow: 0 1px 2px hsl(var(--shadow) / .12), 0 8px 20px hsl(var(--shadow) / .10);
+  }
+
+  .name{
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: clamp(26px, 6vw, 30px);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 2px 0 0;
+  }
+
+  .desc{
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  .desc-location{
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  /* ---------- socials ---------- */
+
+  .socials{
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .social-btn{
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    transition: background .18s ease, border-color .18s ease, transform .18s ease, color .18s ease;
+  }
+
+  .social-btn svg{ width: 19px; height: 19px; }
+
+  .social-btn:hover{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    transform: translateY(-2px);
+  }
+
+  .social-btn:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ---------- section divider ---------- */
+
+  .eyebrow-row{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink-faint);
+  }
+
+  .eyebrow-row::before,
+  .eyebrow-row::after{
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ---------- links ---------- */
+
+  .links{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .link-row{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px 10px 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: background .16s ease, border-color .16s ease, transform .16s ease;
+  }
+
+  .link-row:hover{
+    background: var(--surface-hover);
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  .link-row:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .link-thumb{
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+    background: var(--accent-soft);
+  }
+
+  .link-body{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .link-title{
+    font-weight: 600;
+    font-size: 15.5px;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .link-sub{
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .link-arrow{
+    margin-left: auto;
+    flex: 0 0 auto;
+    color: var(--ink-faint);
+    transition: transform .16s ease, color .16s ease;
+  }
+
+  .link-row:hover .link-arrow{
+    transform: translateX(2px);
+    color: var(--accent);
+  }
+
+  /* ---------- footer ---------- */
+
+  .footer{
+    text-align: center;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--ink-faint);
+    padding-top: 6px;
+  }
+
+  .footer .dot{ color: var(--gold); }
+
+  /* ---------- entrance motion ---------- */
+
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{
+      opacity: 0;
+      animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards;
+    }
+    @keyframes rise{
+      from{ opacity: 0; transform: translateY(10px); }
+      to{ opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+
+<div class="page">
+  <div class="profile reveal" style="animation-delay:.02s">
+    <div class="avatar-wrap">
+      <div class="avatar-ring"></div>
+      <img class="avatar" id="avatarImg" alt="">
+    </div>
+    <h1 class="name" id="nameEl"></h1>
+    <p class="desc" id="descEl"></p>
+  </div>
+
+  <div class="socials reveal" id="socialsEl" style="animation-delay:.08s"></div>
+
+  <div class="reveal" style="animation-delay:.13s">
+    <div class="eyebrow-row"><span class="eyebrow">Links</span></div>
+  </div>
+
+  <div class="links" id="linksEl"></div>
+
+  <div class="footer reveal" style="animation-delay:.3s">made by <span class="dot"></span>yours truly</div>
+</div>
+
+<script>
+  /* ============================================================
+     EDIT ME — this is the only block you need to touch.
+     - avatar: any image URL (square works best, it's cropped round)
+     - links[].image: any image URL (square works best)
+     - leave a field as null/omit it to fall back to a generated
+       placeholder in the studio palette
+     ============================================================ */
+  const PROFILE = {
+    avatar: "logo.png",
+    name: "The Note Room",
+    description: "Your little corner for study notes, resources & tools designed to make student life easier.",
+    location: "Based in Malaysia",
+    socials: [
+      { platform: "instagram", url: null, label: "Instagram" },
+      { platform: "tiktok",    url: null,   label: "TikTok" }
+    ],
+    links: [
+      { title: "Buy Physics Notes on Shopee", subtitle: "Asasi Notes on College Physics by Serway Vuille", url: "https://shopee.com.my/product/368708989/53817329697/", image: "physics.png" },
+      { title: "Get Notion Student Template on Shopee", subtitle: "Animated pink header with pomodoro timer", url: "https://shopee.com.my/product/368708989/42084198997/", image: "notion.png" },
+    ]
+  };
+
+  const ICONS = {
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.7 2h2.9c.18 1.36.8 2.55 1.76 3.4.96.86 2.2 1.4 3.6 1.5v2.93c-1.5-.03-2.9-.44-4.1-1.16v6.6c0 3.6-2.93 6.53-6.53 6.53a6.53 6.53 0 0 1-2.6-12.5v3.13a3.43 3.43 0 1 0 2.4 3.27V2h2.57z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg>',
+    twitter: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 3H21l-6.8 7.8L22 21h-6.1l-4.8-6.3L5.6 21H3.4l7.3-8.3L2.6 3h6.3l4.3 5.8L18.9 3z"/></svg>'
+  };
+
+  const palette = ["#2F5D4F", "#A8752A", "#5B5748", "#7A8B5C"];
+
+  function placeholderAvatar(seed){
+    const c = palette[0];
+    const initial = (PROFILE.name || "?").trim().charAt(0).toUpperCase();
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104">
+      <rect width="104" height="104" fill="${c}"/>
+      <text x="52" y="66" font-family="Georgia, serif" font-size="44" fill="#F6F3EC" text-anchor="middle">${initial}</text>
+    </svg>`;
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+
+  function placeholderThumb(i){
+    const c = palette[i % palette.length];
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <rect width="52" height="52" fill="${c}"/>
+      <rect x="14" y="14" width="24" height="24" fill="none" stroke="#F6F3EC" stroke-width="1.4" opacity=".8"/>
+    </svg>`;
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+
+  document.getElementById("avatarImg").src = PROFILE.avatar || placeholderAvatar();
+  document.getElementById("avatarImg").alt = PROFILE.name;
+  document.getElementById("nameEl").textContent = PROFILE.name;
+  document.getElementById("descEl").textContent = PROFILE.description;
+  if (PROFILE.location) {
+    const locEl = document.createElement("span");
+    locEl.className = "desc-location";
+    locEl.textContent = "📍 " + PROFILE.location;
+    document.getElementById("descEl").appendChild(document.createElement("br"));
+    document.getElementById("descEl").appendChild(locEl);
+  }
+
+  const socialsEl = document.getElementById("socialsEl");
+  PROFILE.socials.forEach(s => {
+    const a = document.createElement("a");
+    a.className = "social-btn";
+    a.href = s.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.setAttribute("aria-label", s.label || s.platform);
+    a.innerHTML = ICONS[s.platform] || "";
+    socialsEl.appendChild(a);
+  });
+
+  const linksEl = document.getElementById("linksEl");
+  PROFILE.links.forEach((l, i) => {
+    const a = document.createElement("a");
+    a.className = "link-row reveal";
+    a.style.animationDelay = (0.16 + i * 0.05) + "s";
+    a.href = l.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+
+    const img = document.createElement("img");
+    img.className = "link-thumb";
+    img.src = l.image || placeholderThumb(i);
+    img.alt = "";
+
+    const body = document.createElement("div");
+    body.className = "link-body";
+    const title = document.createElement("span");
+    title.className = "link-title";
+    title.textContent = l.title;
+    body.appendChild(title);
+    if (l.subtitle){
+      const sub = document.createElement("span");
+      sub.className = "link-sub";
+      sub.textContent = l.subtitle;
+      body.appendChild(sub);
+    }
+
+    const arrow = document.createElement("span");
+    arrow.className = "link-arrow";
+    arrow.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>';
+
+    a.appendChild(img);
+    a.appendChild(body);
+    a.appendChild(arrow);
+    linksEl.appendChild(a);
+  });
+</script>
